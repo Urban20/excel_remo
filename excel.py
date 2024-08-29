@@ -96,13 +96,15 @@ if __name__ == '__main__':
 
 
                 except AttributeError:
-                                
-                    nombre_remeros.append(html.find('h3',class_='profile-name text-big text-center').get_text())
-                    tiempo_remeros.append('no encontrado')
-                    distancia.append('no encontrado')
+                    try:    
+                        nombre_remeros.append(html.find('h3',class_='profile-name text-big text-center').get_text())
+                        tiempo_remeros.append('no encontrado')
+                        distancia.append('no encontrado')
+                    except AttributeError:
+                         os.system(f'msg * el usuario {usuario} no fue encontrado')
                 except Exception as error:
-                    print(f'error: {error}')
-                    continue
+                    os.system(f'msg * ocurrio un error:{error}')
+                    break
                         
                 
 
