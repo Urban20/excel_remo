@@ -68,6 +68,7 @@ if __name__ == '__main__':
             nombre_remeros = []
             tiempo_remeros = []
             distancia = []
+            trabajo = []
 
             opciones= webdriver.EdgeOptions()
             opciones.add_argument("--headless")
@@ -86,13 +87,15 @@ if __name__ == '__main__':
                     contenedor= html.find('section',class_='d-flex flex-column overview-activity-list-container')
                 
                     stats= contenedor.find_all('p',class_='text-lead',limit=2)
-                            
                     remero= html.find('h3',class_='profile-name text-big').get_text()
+                    titulo = html.find('p',class_='text-lead title')
                     nombre_remeros.append(remero)
                     #tiempo
                     tiempo_remeros.append(stats[0].get_text())
                     #distancia
                     distancia.append(stats[1].get_text())
+                    #titulo
+                    trabajo.append(titulo.get_text())
 
 
                 except AttributeError:
@@ -100,20 +103,22 @@ if __name__ == '__main__':
                         nombre_remeros.append(html.find('h3',class_='profile-name text-big text-center').get_text())
                         tiempo_remeros.append('no encontrado')
                         distancia.append('no encontrado')
+                        trabajo.append('no encontrado')
                     except AttributeError:
                          os.system(f'msg * el usuario {usuario} no fue encontrado')
-                except Exception as error:
-                    os.system(f'msg * ocurrio un error:{error}')
-                    break
+                    
+                    except Exception as error:
+                        os.system(f'msg * ocurrio un error:{error}')
+                        break
                         
                 
 
             try:
-                excel = pandas.DataFrame(
-                        {
-                            'Remeros': nombre_remeros,
+                excel = pandas.DataFrame({
+                            'Subido por': nombre_remeros,
                             'Tiempos' : tiempo_remeros,
-                            'Distancias': distancia
+                            'Distancias': distancia,
+                            'Titulo del trabajo': trabajo
 
                         })
                 with pandas.ExcelWriter(f'{fecha}.xlsx',engine='xlsxwriter') as editor:
